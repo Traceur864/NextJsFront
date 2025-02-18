@@ -1,0 +1,65 @@
+/* Reset de márgenes y rellenos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Estilo básico del body */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0 !important; /* Usar !important para forzar el fondo gris claro */
+    color: #333; /* Color de texto oscuro */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;  /* Evitar márgenes por defecto */
+  }
+  
+  /* Estilos del Navbar */
+  nav {
+    background-color: #0070f3; /* Fondo azul */
+    padding: 10px 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  nav a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Estilos del main */
+  main {
+    flex-grow: 1; /* Esto hace que el contenido principal ocupe el espacio restante */
+  }
+  
+  /* Fondo para las páginas de contenido */
+  div {
+    background-color: white; /* Fondo blanco para los contenedores */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estilos para los botones */
+  button {
+    background-color: #0070f3;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #005bb5;
+  }
+  
