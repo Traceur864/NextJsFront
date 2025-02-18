@@ -10,7 +10,7 @@
     font-family: Arial, sans-serif;
     background-color: #f0f0f0 !important; /* Usar !important para forzar el fondo gris claro */
     color: #333; /* Color de texto oscuro */
-    padding: 20px;
+    /*padding: 20px;*/
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -20,7 +20,7 @@
   /* Estilos del Navbar */
   nav {
     background-color: #0070f3; /* Fondo azul */
-    padding: 10px 20px;
+    padding: 15px 20px;
     display: flex;
     gap: 20px;
     align-items: center;
@@ -34,6 +34,7 @@
   
   nav a:hover {
     text-decoration: underline;
+    color: #07d9b6; /* Color de texto azul */
   }
   
   /* Estilos del main */
