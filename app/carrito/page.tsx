@@ -15,20 +15,38 @@ const Carrito = () => {
   const [carrito, setCarrito] = useState<ProductoCarrito[]>([]);
   const usuario_id = 1;
 
+  const getToken = () => {
+    return localStorage.getItem("token");
+  };
+
   useEffect(() => {
-    axios.get(`http://localhost:5000/carrito/${usuario_id}`)
+    const token = getToken();
+    if (token) {
+      axios.get(`http://localhost:5000/carrito/${usuario_id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      })
       .then((res) => setCarrito(res.data))
       .catch((err) => console.error(err));
+    }
   }, []);
 
   // Función para realizar el pedido
   const realizarPedido = () => {
-    axios.post("http://localhost:5000/pedidos", { usuario_id })
+    const token = getToken();
+    if(token){
+    axios.post("http://localhost:5000/pedidos", { usuario_id },{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
       .then((res) => {
         alert(res.data.mensaje);
         setCarrito([]); // Vaciar el carrito en el frontend después de hacer el pedido
       })
       .catch((err) => console.error(err));
+    }
   };
 
   return (
@@ -53,12 +71,19 @@ const Carrito = () => {
 };
 
 const eliminarDelCarrito = (id: number) => {
-  axios.delete(`http://localhost:5000/carrito/${id}`)
-    .then(() => {
-      alert("Producto eliminado");
-      window.location.reload();
+  const token = localStorage.getItem("token");
+  if (token) {
+    axios.delete(`http://localhost:5000/carrito/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .catch((err) => console.error(err));
+      .then(() => {
+        alert("Producto eliminado");
+        window.location.reload();
+      })
+      .catch((err) => console.error(err));
+  };
 };
 
 export default Carrito;

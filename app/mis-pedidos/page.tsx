@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
 
 interface Pedido {
   id: number;
@@ -9,6 +10,7 @@ interface Pedido {
 }
 
 const MisPedidos = () => {
+  useAuthRedirect(); // Si el usuario no está autenticado, lo redirige a /login
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
   const usuario_id = 1;
 

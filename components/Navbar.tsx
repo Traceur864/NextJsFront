@@ -9,8 +9,6 @@ const Navbar = () => {
     <nav>
       <Link href="/">Home</Link>
       <Link href="/catalogo">Catálogo</Link>
-      
-
       {user ? (
         <>
           <Link href="/carrito">Carrito</Link>
