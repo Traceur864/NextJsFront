@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
 
 interface ProductoCarrito {
   id: number;
@@ -10,6 +11,7 @@ interface ProductoCarrito {
 }
 
 const Carrito = () => {
+  useAuthRedirect(); // Si el usuario no está autenticado, lo redirige a /login
   const [carrito, setCarrito] = useState<ProductoCarrito[]>([]);
   const usuario_id = 1;
 
