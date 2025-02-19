@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import './css/styleCatalog.css'
 
 // Definir la interfaz para el producto
 interface Producto {
@@ -20,18 +21,18 @@ const Catalogo = () => {
   };
 
   useEffect(() => {
-    const token = getToken();
-    if (token) {
+    //const token = getToken();
+    //if (token) {
       axios.get("http://localhost:5000/productos", {
-        headers: {
+        /* headers: {
           Authorization: `Bearer ${token}`,  // Enviar el token en los encabezados
-        },
+        }, */
       })
         .then((res) => setProductos(res.data))  // Asignar los productos correctamente
         .catch((err) => console.error(err));
-    } else {
+   /*  } else {
       console.log("No se encontró el token de autenticación.");
-    }
+    } */
   }, []);
 
   return (

@@ -10,7 +10,7 @@
     font-family: Arial, sans-serif;
     background-color: #f0f0f0 !important; /* Usar !important para forzar el fondo gris claro */
     color: #333; /* Color de texto oscuro */
-    /*padding: 20px;*/
+    padding: 5px;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -46,13 +46,7 @@
   div {
     background-color: white; /* Fondo blanco para los contenedores */
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    text-align: justify;
   }
-  
-  
-  
-  button:hover {
-    background-color: #005bb5;
-  }
-  
