@@ -13,7 +13,8 @@ interface Producto {
 }
 
 const Catalogo = () => {
-  const [productos, setProductos] = useState<Producto[]>([]);  // Asegúrate de que el estado sea de tipo Producto[]
+  const [productos, setProductos] = useState<Producto[]>([]);
+  const [cantidades, setCantidades] = useState<{ [key: number]: number }>({}); // Estado para cantidades
 
   // Función para obtener el token del localStorage
   const getToken = () => {
@@ -21,45 +22,38 @@ const Catalogo = () => {
   };
 
   useEffect(() => {
-    //const token = getToken();
-    //if (token) {
-      axios.get("http://localhost:5000/productos", {
-        /* headers: {
-          Authorization: `Bearer ${token}`,  // Enviar el token en los encabezados
-        }, */
+    axios.get("http://localhost:5000/productos")
+      .then((res) => {
+        setProductos(res.data);
+        // Inicializar el estado de cantidades con valor 1 para cada producto
+        const cantidadesIniciales: { [key: number]: number } = {};
+        res.data.forEach((producto: Producto) => {
+          cantidadesIniciales[producto.id] = 1;
+        });
+        setCantidades(cantidadesIniciales);
       })
-        .then((res) => setProductos(res.data))  // Asignar los productos correctamente
-        .catch((err) => console.error(err));
-   /*  } else {
-      console.log("No se encontró el token de autenticación.");
-    } */
+      .catch((err) => console.error(err));
   }, []);
 
-  return (
-    <div>
-      <h1>Catálogo de Productos</h1>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
-        {productos.map((producto) => (
-          <div key={producto.id} style={{ border: "1px solid #000", padding: "10px" }}>
-            <img src={producto.imagen} alt={producto.nombre} width="100" />
-            <h3>{producto.nombre}</h3>
-            <p>{producto.descripcion}</p>
-            <p>Precio: ${producto.precio}</p>
-            <button onClick={() => agregarAlCarrito(producto.id)}>Agregar al Carrito</button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+   // Función para cambiar la cantidad de un producto
+   const modificarCantidad = (productoId: number, cambio: number) => {
+    setCantidades((prevCantidades) => ({
+      ...prevCantidades,
+      [productoId]: Math.max(1, (prevCantidades[productoId] || 1) + cambio), // Evitar valores menores a 1
+    }));
+  };
 
-// Función para agregar un producto al carrito
+  // Función para agregar un producto al carrito
 const agregarAlCarrito = (producto_id: number) => {
   const token = localStorage.getItem("token"); // Obtener el token del localStorage
   const usuario_id = 1; // Simulación de usuario (puedes cambiar esto si usas el contexto de autenticación)
 
   if (token) {
-    axios.post("http://localhost:5000/carrito", { usuario_id, producto_id, cantidad: 1 }, {
+    axios.post("http://localhost:5000/carrito", { 
+      usuario_id, 
+      producto_id,
+      cantidad: cantidades[producto_id] || 1, // Tomar la cantidad actual
+      }, {
       headers: {
         Authorization: `Bearer ${token}`,  // Agregar el token a los encabezados
       },
@@ -69,6 +63,32 @@ const agregarAlCarrito = (producto_id: number) => {
   } else {
     alert("No estás autenticado. Por favor, inicia sesión.");
   }
+};
+
+  return (
+    <div>
+      <h1>Catálogo de Productos</h1>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+        {productos.map((producto) => (
+          <div key={producto.id} style={{ border: "1px solid #000", padding: "10px", width: "200px" }}>
+            <img src={producto.imagen} alt={producto.nombre} width="100" />
+            <h3>{producto.nombre}</h3>
+            <p>{producto.descripcion}</p>
+            <p>Precio: ${producto.precio}</p>
+
+            {/* Controles de cantidad */}
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <button onClick={() => modificarCantidad(producto.id, -1)}>-</button>
+              <span>{cantidades[producto.id]}</span>
+              <button onClick={() => modificarCantidad(producto.id, 1)}>+</button>
+            </div>
+
+            <button onClick={() => agregarAlCarrito(producto.id)}>Agregar al Carrito</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Catalogo;

@@ -19,7 +19,12 @@ const Carrito = () => {
     return localStorage.getItem("token");
   };
 
+ 
+
   useEffect(() => {
+    const user = localStorage.getItem("user");
+    console.log(user);
+
     const token = getToken();
     if (token) {
       axios.get(`http://localhost:5000/carrito/${usuario_id}`,{
@@ -49,6 +54,29 @@ const Carrito = () => {
     }
   };
 
+  const eliminarDelCarrito = (id: number) => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("No hay token de autenticación.");
+    return;
+  }
+
+  axios.delete(`http://localhost:5000/carrito/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then(() => {
+      alert("Producto eliminado");
+      setCarrito((prevCarrito) => prevCarrito.filter((item) => item.id !== id));
+    })
+    .catch((err) => {
+      console.error("Error al eliminar producto:", err);
+      alert("No se pudo eliminar el producto.");
+    });
+};
+
   return (
     <div>
       <h1>Carrito de Compras</h1>
@@ -70,7 +98,7 @@ const Carrito = () => {
   );
 };
 
-const eliminarDelCarrito = (id: number) => {
+/* const eliminarDelCarrito = (id: number) => {
   const token = localStorage.getItem("token");
   if (token) {
     axios.delete(`http://localhost:5000/carrito/${id}`, {
@@ -80,10 +108,13 @@ const eliminarDelCarrito = (id: number) => {
     })
       .then(() => {
         alert("Producto eliminado");
-        window.location.reload();
+        //window.location.reload();
       })
       .catch((err) => console.error(err));
   };
 };
+ */
+
+
 
 export default Carrito;

@@ -1,17 +1,19 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
 
 const useAuthRedirect = () => {
-  const { user } = useAuth(); // Obtenemos el usuario del contexto
   const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
-      router.push("/login"); // Si no hay usuario, redirige al login
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.push("/login"); // Redirige si no hay token
     }
-  }, [user, router]);
+  }, []);
+
+  return null;
 };
 
 export default useAuthRedirect;
