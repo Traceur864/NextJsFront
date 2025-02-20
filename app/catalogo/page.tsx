@@ -46,8 +46,11 @@ const Catalogo = () => {
   // Función para agregar un producto al carrito
 const agregarAlCarrito = (producto_id: number) => {
   const token = localStorage.getItem("token"); // Obtener el token del localStorage
-  const usuario_id = 1; // Simulación de usuario (puedes cambiar esto si usas el contexto de autenticación)
-
+  //const usuario_id = 1; // Simulación de usuario (puedes cambiar esto si usas el contexto de autenticación)
+  const user = localStorage.getItem("user");
+  const usuario_id = user ? JSON.parse(user).id: 1;  // Default to 1 if no user object found
+  console.log(usuario_id);
+  
   if (token) {
     axios.post("http://localhost:5000/carrito", { 
       usuario_id, 

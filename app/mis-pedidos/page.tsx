@@ -3,10 +3,18 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 
+interface Producto {
+  nombre: string;
+  cantidad: number;
+  precio: number;
+  subtotal: number;
+}
+
 interface Pedido {
   id: number;
   total: number;
   fecha: string;
+  productos: Producto[];
 }
 
 const MisPedidos = () => {
@@ -25,10 +33,17 @@ const MisPedidos = () => {
       <h1>Mis Pedidos</h1>
       {pedidos.length === 0 ? <p>No hay pedidos realizados.</p> : (
         pedidos.map((pedido) => (
-          <div key={pedido.id} style={{ border: "1px solid #000", padding: "10px" }}>
-            <p>Pedido ID: {pedido.id}</p>
-            <p>Total: ${pedido.total}</p>
-            <p>Fecha: {new Date(pedido.fecha).toLocaleString()}</p>
+          <div key={pedido.id} style={{ border: "1px solid #000", padding: "10px", marginBottom: "20px" }}>
+            <p><strong>Pedido ID:</strong> {pedido.id}</p>
+            <p><strong>Total:</strong> ${pedido.total}</p>
+            <p><strong>Fecha:</strong> {new Date(pedido.fecha).toLocaleString()}</p>
+            <h3>Productos:</h3>
+            
+              {pedido.productos.map((producto, index) => (
+                <span key={index}>
+                  {producto.nombre} - {producto.cantidad} x ${producto.precio} = ${producto.subtotal}
+                  <br /></span>
+              ))}
           </div>
         ))
       )}
