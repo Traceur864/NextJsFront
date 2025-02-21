@@ -44,7 +44,7 @@ const Catalogo = () => {
   };
 
   // Función para agregar un producto al carrito
-const agregarAlCarrito = (producto_id: number) => {
+  const agregarAlCarrito = (producto_id: number) => {
   const token = localStorage.getItem("token"); // Obtener el token del localStorage
   //const usuario_id = 1; // Simulación de usuario (puedes cambiar esto si usas el contexto de autenticación)
   const user = localStorage.getItem("user");
@@ -66,37 +66,48 @@ const agregarAlCarrito = (producto_id: number) => {
   } else {
     alert("No estás autenticado. Por favor, inicia sesión.");
   }
-};
+  };
 
   return (
     <div>
       <h1>Catálogo de Productos</h1>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+      <div id="catalog-container">
         {productos.map((producto) => (
-          <div key={producto.id} style={{ border: "1px solid #000", padding: "10px", width: "200px" }}>
-            <img src={`http://localhost:5000/images/${producto.imagen}`} 
-     alt={producto.nombre} 
-     width="100" 
-     onError={(e) => (e.currentTarget.src = "/fallback.jpg")} // Imagen de respaldo en caso de error
-/>
-
-            <h3>{producto.nombre}</h3>
-            <p>{producto.descripcion}</p>
-            <p>Precio: ${producto.precio}</p>
-
-            {/* Controles de cantidad */}
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div id="card" key={producto.id}>
+            <div id="image_container">
+              <img
+                src={`http://localhost:5000/images/${producto.imagen}`}
+                alt={producto.nombre}
+                width="100"
+                onError={(e) => (e.currentTarget.src = "/GitHUb.jpg")}
+              />
+            </div>
+            <div id="title">
+              <span>{producto.nombre}</span>
+            </div>
+            <div id="size">
+              <span>{producto.descripcion}</span>
+            </div>
+            <div id="moreless">
+              <span style={{paddingRight: "20px"}}>Cantidad:</span> <br />
               <button onClick={() => modificarCantidad(producto.id, -1)}>-</button>
-              <span>{cantidades[producto.id]}</span>
+              <span style={{paddingInlineEnd: '10px', paddingInlineStart: '10px', paddingBlockStart: '3px'}}>{cantidades[producto.id]}</span>
               <button onClick={() => modificarCantidad(producto.id, 1)}>+</button>
             </div>
-
-            <button onClick={() => agregarAlCarrito(producto.id)}>Agregar al Carrito</button>
+            <div id="action">
+              <div id="price">
+                <span>Precio: ${producto.precio}</span>
+              </div>
+              <button id="cart-button" onClick={() => agregarAlCarrito(producto.id)}>
+                <span>Add to cart</span>
+              </button>
+            </div>
           </div>
         ))}
       </div>
     </div>
   );
+
 };
 
 export default Catalogo;

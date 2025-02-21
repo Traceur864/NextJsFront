@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
+import './css/style.css'
 
 interface Producto {
   nombre: string;
@@ -31,21 +32,26 @@ const MisPedidos = () => {
   }, []);
 
   return (
-    <div>
+    <div className="mis-pedidos-container">
       <h1>Mis Pedidos</h1>
-      {pedidos.length === 0 ? <p>No hay pedidos realizados.</p> : (
+      {pedidos.length === 0 ? (
+        <p className="no-pedidos">No hay pedidos realizados.</p>
+      ) : (
         pedidos.map((pedido) => (
-          <div key={pedido.id} style={{ border: "1px solid #000", padding: "10px", marginBottom: "20px" }}>
-            <p><strong>Pedido ID:</strong> {pedido.id}</p>
-            <p><strong>Total:</strong> ${pedido.total}</p>
-            <p><strong>Fecha:</strong> {new Date(pedido.fecha).toLocaleString()}</p>
+          <div key={pedido.id} className="pedido-card">
+            <p className="pedido-id"><strong>Pedido ID:</strong> {pedido.id}</p>
+            <p className="pedido-total"><strong>Total:</strong> ${pedido.total}</p>
+            <p className="pedido-fecha">
+              <strong>Fecha:</strong> {new Date(pedido.fecha).toLocaleString()}
+            </p>
             <h3>Productos:</h3>
-            
+            <ul className="productos-lista">
               {pedido.productos.map((producto, index) => (
-                <span key={index}>
-                  {producto.nombre} - {producto.cantidad} x ${producto.precio} = ${producto.subtotal}
-                  <br /></span>
+                <li key={index} className="producto-item">
+                  {producto.nombre} - {producto.cantidad} x ${producto.precio} = <strong>${producto.subtotal}</strong>
+                </li>
               ))}
+            </ul>
           </div>
         ))
       )}

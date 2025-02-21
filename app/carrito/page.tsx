@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
+import './css/style.css'
 
 interface ProductoCarrito {
   id: number;
@@ -107,23 +108,26 @@ const Carrito = () => {
   return (
     <div>
       <h1>Carrito de Compras</h1>
-      {carrito.length === 0 ? <p>No hay productos en el carrito.</p> : (
-        carrito.map((item) => (
-          <div key={item.id} style={{ border: "1px solid #000", padding: "10px" }}>
+        <div className="carrito-productos">
+        {carrito.map((item) => (
+          <div key={item.id} className="carrito-producto">
             <h3>{item.nombre}</h3>
             <p>Cantidad: {item.cantidad}</p>
             <p>Precio c/u: ${item.precio}</p>
             <p>Subtotal: ${item.precio * item.cantidad}</p>
-            <button onClick={() => eliminarDelCarrito(item.id)}>Eliminar</button>
+            <button className="eliminar-btn" onClick={() => eliminarDelCarrito(item.id)}>Eliminar</button>
           </div>
-        ))
-      )}
+        ))}
+      </div>
       {carrito.length > 0 && (
+        <div className="realizar-pedido-btn">
         <button onClick={realizarPedido}>Realizar Pedido</button>
+        </div>
       )}
-
+      
 {mostrarFormulario && (
-        <div>
+      <div className="container">
+        <div className="formulario-envio">
           <h2>Formulario de Envío</h2>
           <label>
             Nombre:
@@ -160,14 +164,14 @@ const Carrito = () => {
               onChange={manejarEnvio}
             />
           </label>
-          <button onClick={enviarFormulario}>Confirmar Pedido</button>
+          <button className="confirmar-pedido-btn" onClick={enviarFormulario}>Confirmar Pedido</button>
+          </div>
         </div>
       )}
-    </div>
+      </div>
+  
   );
+  
 };
-
-
-
 
 export default Carrito;
