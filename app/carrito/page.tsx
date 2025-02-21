@@ -21,7 +21,9 @@ const Carrito = () => {
     direccion: "",
   });
   const [pedido, setPedido] = useState<any>(null);
-  const usuario_id = 1;
+  //const usuario_id = 1;
+  const user = localStorage.getItem("user");
+  const usuario_id = user ? JSON.parse(user).id: 1; 
 
   const getToken = () => {
     return localStorage.getItem("token");

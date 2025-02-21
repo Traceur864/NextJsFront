@@ -20,7 +20,9 @@ interface Pedido {
 const MisPedidos = () => {
   useAuthRedirect(); // Si el usuario no está autenticado, lo redirige a /login
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
-  const usuario_id = 1;
+  //const usuario_id = 1;
+  const user = localStorage.getItem("user");
+  const usuario_id = user ? JSON.parse(user).id: 1; 
 
   useEffect(() => {
     axios.get(`http://localhost:5000/pedidos/${usuario_id}`)

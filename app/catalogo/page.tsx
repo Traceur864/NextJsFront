@@ -74,7 +74,12 @@ const agregarAlCarrito = (producto_id: number) => {
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
         {productos.map((producto) => (
           <div key={producto.id} style={{ border: "1px solid #000", padding: "10px", width: "200px" }}>
-            <img src={producto.imagen} alt={producto.nombre} width="100" />
+            <img src={`http://localhost:5000/images/${producto.imagen}`} 
+     alt={producto.nombre} 
+     width="100" 
+     onError={(e) => (e.currentTarget.src = "/fallback.jpg")} // Imagen de respaldo en caso de error
+/>
+
             <h3>{producto.nombre}</h3>
             <p>{producto.descripcion}</p>
             <p>Precio: ${producto.precio}</p>
