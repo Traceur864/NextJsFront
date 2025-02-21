@@ -32,7 +32,7 @@
     z-index: 5;
     width: 100%;
     height: 8rem;
-    background-color: var(--primary-800);
+    background-color: rgb(94, 201, 247);
     border-radius: 0.5rem;
     display: flex;
     align-items: center;
@@ -47,7 +47,7 @@
   
   #title {
     overflow: clip;
-  
+    margin-top: 12px;
     width: 100%;
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;

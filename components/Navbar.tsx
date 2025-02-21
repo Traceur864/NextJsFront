@@ -8,7 +8,7 @@ const Navbar = () => {
 
   return (
     <nav>
-      {/* <Link href="/">Home</Link> */}
+      <Link href="/">Home</Link>
       <Link href="/catalogo">Catálogo</Link>
       {user ? (
         <>
