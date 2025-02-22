@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import './css/styleCatalog.css'
+import useAuthRedirect from "@/hooks/useAuthRedirect";
+import { ToastContainer, toast } from 'react-toastify';
+import "./css/styleCatalog.css";
 
 // Definir la interfaz para el producto
 interface Producto {
@@ -11,65 +13,97 @@ interface Producto {
   precio: number;
   imagen: string;
 }
-
 const Catalogo = () => {
+  useAuthRedirect();
   const [productos, setProductos] = useState<Producto[]>([]);
-  const [cantidades, setCantidades] = useState<{ [key: number]: number }>({}); // Estado para cantidades
-
-  // Función para obtener el token del localStorage
-  const getToken = () => {
-    return localStorage.getItem("token");
-  };
+  const [cantidades, setCantidades] = useState<{ [key: number]: number }>({});
 
   useEffect(() => {
-    axios.get("http://localhost:5000/productos")
-      .then((res) => {
-        setProductos(res.data);
-        // Inicializar el estado de cantidades con valor 1 para cada producto
-        const cantidadesIniciales: { [key: number]: number } = {};
-        res.data.forEach((producto: Producto) => {
-          cantidadesIniciales[producto.id] = 1;
-        });
-        setCantidades(cantidadesIniciales);
-      })
-      .catch((err) => console.error(err));
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      axios
+        .get("http://localhost:5000/productos")
+        .then((res) => {
+          setProductos(res.data);
+          const cantidadesIniciales: { [key: number]: number } = {};
+          res.data.forEach((producto: Producto) => {
+            cantidadesIniciales[producto.id] = 1;
+          });
+          setCantidades(cantidadesIniciales);
+        })
+        .catch((err) => console.error(err));
+    }
   }, []);
 
-   // Función para cambiar la cantidad de un producto
-   const modificarCantidad = (productoId: number, cambio: number) => {
+  const modificarCantidad = (productoId: number, cambio: number) => {
     setCantidades((prevCantidades) => ({
       ...prevCantidades,
-      [productoId]: Math.max(1, (prevCantidades[productoId] || 1) + cambio), // Evitar valores menores a 1
+      [productoId]: Math.max(1, (prevCantidades[productoId] || 1) + cambio),
     }));
   };
 
-  // Función para agregar un producto al carrito
   const agregarAlCarrito = (producto_id: number) => {
-  const token = localStorage.getItem("token"); // Obtener el token del localStorage
-  //const usuario_id = 1; // Simulación de usuario (puedes cambiar esto si usas el contexto de autenticación)
-  const user = localStorage.getItem("user");
-  const usuario_id = user ? JSON.parse(user).id: 1;  // Default to 1 if no user object found
-  console.log(usuario_id);
-  
-  if (token) {
-    axios.post("http://localhost:5000/carrito", { 
-      usuario_id, 
-      producto_id,
-      cantidad: cantidades[producto_id] || 1, // Tomar la cantidad actual
-      }, {
-      headers: {
-        Authorization: `Bearer ${token}`,  // Agregar el token a los encabezados
-      },
-    })
-      .then(() => alert("Producto agregado al carrito"))
-      .catch((err) => console.error(err));
-  } else {
-    alert("No estás autenticado. Por favor, inicia sesión.");
-  }
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    const usuario_id = user ? JSON.parse(user).id : 1;
+
+    if (token) {
+      axios
+        .post(
+          "http://localhost:5000/carrito",
+          {
+            usuario_id,
+            producto_id,
+            cantidad: cantidades[producto_id] || 1,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(() => {
+          toast.success("Producto agregado al carrito 🛒", {
+            position: "bottom-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            theme: "colored",
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("Error al agregar al carrito ❌", {
+            position: "bottom-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            theme: "colored",
+          });
+        });
+    } else {
+      toast.warning("No estás autenticado. Inicia sesión 🔐", {
+        position: "bottom-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        theme: "colored",
+      });
+    }
   };
 
   return (
     <div>
+      {/* Contenedor de notificaciones */}
+      <ToastContainer position="bottom-center" />
+
       <h1>Catálogo de Productos</h1>
       <div id="catalog-container">
         {productos.map((producto) => (
@@ -89,9 +123,11 @@ const Catalogo = () => {
               <span>{producto.descripcion}</span>
             </div>
             <div id="moreless">
-              <span style={{paddingRight: "20px"}}>Cantidad:</span> <br />
+              <span style={{ paddingRight: "20px" }}>Cantidad:</span> <br />
               <button onClick={() => modificarCantidad(producto.id, -1)}>-</button>
-              <span style={{paddingInlineEnd: '10px', paddingInlineStart: '10px', paddingBlockStart: '3px'}}>{cantidades[producto.id]}</span>
+              <span style={{ paddingInlineEnd: "10px", paddingInlineStart: "10px", paddingBlockStart: "3px" }}>
+                {cantidades[producto.id]}
+              </span>
               <button onClick={() => modificarCantidad(producto.id, 1)}>+</button>
             </div>
             <div id="action">
@@ -107,7 +143,6 @@ const Catalogo = () => {
       </div>
     </div>
   );
-
 };
 
 export default Catalogo;

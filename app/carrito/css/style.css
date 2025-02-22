@@ -34,7 +34,9 @@
 }
 
 .realizar-pedido-btn{
+   margin-top: 25px;
    text-align: center;
+   margin-bottom: 25px;
 }
 
 .realizar-pedido-btn button:hover {

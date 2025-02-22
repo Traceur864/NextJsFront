@@ -14,6 +14,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [token, setToken] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -33,7 +34,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = () => {
-    const router = useRouter(); 
+     
     setUser(null);
     setToken(null);
     localStorage.removeItem("user");

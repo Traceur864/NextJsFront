@@ -9,9 +9,9 @@ const Navbar = () => {
   return (
     <nav>
       <Link href="/">Home</Link>
-      <Link href="/catalogo">Catálogo</Link>
       {user ? (
         <>
+          <Link href="/catalogo">Catálogo</Link>
           <Link href="/carrito">Carrito</Link>
           <Link href="/mis-pedidos">Mis Pedidos</Link>
           <span id="right">Hola, {user.nombre}</span>

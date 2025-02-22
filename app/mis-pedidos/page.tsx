@@ -39,7 +39,6 @@ const MisPedidos = () => {
       ) : (
         pedidos.map((pedido) => (
           <div key={pedido.id} className="pedido-card">
-            <p className="pedido-id"><strong>Pedido ID:</strong> {pedido.id}</p>
             <p className="pedido-total"><strong>Total:</strong> ${pedido.total}</p>
             <p className="pedido-fecha">
               <strong>Fecha:</strong> {new Date(pedido.fecha).toLocaleString()}

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
+import { ToastContainer, toast } from 'react-toastify';
 import './css/style.css'
 
 interface ProductoCarrito {
@@ -65,48 +66,86 @@ const Carrito = () => {
           correo: formulario.correo,
           telefono: formulario.telefono,
           direccion: formulario.direccion,
-           
         }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        alert(res.data.mensaje);
+        toast.success("Pedido realizado con éxito", {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+        });
         setCarrito([]); // Vaciar el carrito en el frontend después de hacer el pedido
         setMostrarFormulario(false); // Ocultar el formulario
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        toast.error("Hubo un error al realizar el pedido", {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+        });
+      });
     } else {
       alert("Por favor, completa todos los campos.");
     }
   };
+  
 
   const eliminarDelCarrito = (id: number) => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    alert("No hay token de autenticación.");
-    return;
-  }
-
-  axios.delete(`http://localhost:5000/carrito/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(() => {
-      alert("Producto eliminado");
-      setCarrito((prevCarrito) => prevCarrito.filter((item) => item.id !== id));
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      alert("No hay token de autenticación.");
+      return;
+    }
+  
+    axios.delete(`http://localhost:5000/carrito/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .catch((err) => {
-      console.error("Error al eliminar producto:", err);
-      alert("No se pudo eliminar el producto.");
-    });
-};
+      .then(() => {
+        toast.success("Producto eliminado correctamente", {
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          theme: "colored",
+        });
+        setCarrito((prevCarrito) => prevCarrito.filter((item) => item.id !== id));
+      })
+      .catch((err) => {
+        console.error("Error al eliminar producto:", err);
+        toast.error("No se pudo eliminar el producto", {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+        });
+      });
+  };
+  
 
   return (
+    
     <div>
+      <ToastContainer />
       <h1>Carrito de Compras</h1>
         <div className="carrito-productos">
         {carrito.map((item) => (
@@ -136,6 +175,8 @@ const Carrito = () => {
               name="nombre"
               value={formulario.nombre}
               onChange={manejarEnvio}
+
+
             />
           </label>
           <label>
