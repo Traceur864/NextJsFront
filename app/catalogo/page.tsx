@@ -113,7 +113,7 @@ const Catalogo = () => {
                 src={`http://localhost:5000/images/${producto.imagen}`}
                 alt={producto.nombre}
                 width="100"
-                onError={(e) => (e.currentTarget.src = "/GitHUb.jpg")}
+                onError={(e) => (e.currentTarget.src = "/public/imgs/GitHUb.jpg")}
               />
             </div>
             <div id="title">
