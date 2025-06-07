@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
-import "./css/styleLogin.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -24,31 +23,54 @@ const Login = () => {
     const data = await res.json();
 
     if (res.ok) {
-      // Actualizamos el contexto con los datos de usuario y token
       login(data.user, data.token);
-      // Redirigimos al catálogo
       router.push("/catalogo");
     } else {
       setError(data.error);
     }
   };
 
-return (
-    <div>
-      <p id="form-title">Iniciar Sesión</p>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleLogin}>
-        <div id="input-container">
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
-        </div>
-        <div id="input-container">
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" required />
-        </div>
-        <button id="submit" type="submit">Iniciar Sesión</button>
-      </form>
-    </div>
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
+        <h3 className="text-3xl font-bold text-center mb-6 text-gray-800">
+          Iniciar Sesión
+        </h3>
 
-    
+        {error && (
+          <p className="text-red-500 text-sm text-center mb-4">{error}</p>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Correo electrónico"
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Contraseña"
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white font-semibold py-2 rounded-xl hover:bg-blue-700 transition duration-200"
+          >
+            Iniciar Sesión
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 

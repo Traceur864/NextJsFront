@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import { ToastContainer, toast } from 'react-toastify';
-import './css/style.css'
 
 interface ProductoCarrito {
   id: number;
@@ -142,76 +141,107 @@ const Carrito = () => {
   };
   
 
-  return (
-    
-    <div>
-      <ToastContainer />
-      <h1>Carrito de Compras</h1>
-        <div className="carrito-productos">
-        {carrito.map((item) => (
-          <div key={item.id} className="carrito-producto">
-            <h3>{item.nombre}</h3>
-            <p>Cantidad: {item.cantidad}</p>
-            <p>Precio c/u: ${item.precio}</p>
-            <p>Subtotal: ${item.precio * item.cantidad}</p>
-            <button className="eliminar-btn" onClick={() => eliminarDelCarrito(item.id)}>Eliminar</button>
+return (
+  <div className="min-h-screen bg-gray-100 py-10 px-4">
+    <ToastContainer />
+
+    <h1 className="text-3xl font-bold text-center text-blue-700 mb-10">
+      Carrito de Compras
+    </h1>
+
+    <div className="grid gap-6 max-w-5xl mx-auto">
+      {carrito.map((item) => (
+        <div
+          key={item.id}
+          className="bg-white p-6 rounded-lg shadow flex flex-col sm:flex-row sm:justify-between sm:items-center"
+        >
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800">{item.nombre}</h3>
+            <p className="text-gray-600">Cantidad: {item.cantidad}</p>
+            <p className="text-gray-600">Precio c/u: ${item.precio}</p>
+            <p className="text-gray-800 font-medium">Subtotal: ${item.precio * item.cantidad}</p>
           </div>
-        ))}
-      </div>
-      {carrito.length > 0 && (
-        <div className="realizar-pedido-btn">
-        <button onClick={realizarPedido}>Realizar Pedido</button>
+          <button
+            className="mt-4 sm:mt-0 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow"
+            onClick={() => eliminarDelCarrito(item.id)}
+          >
+            Eliminar
+          </button>
         </div>
-      )}
-      
-{mostrarFormulario && (
-      <div className="container">
-        <div className="formulario-envio">
-          <h2>Formulario de Envío</h2>
-          <label>
-            Nombre:
+      ))}
+    </div>
+
+    {carrito.length > 0 && (
+      <div className="text-center mt-10">
+        <button
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-md shadow-md"
+          onClick={realizarPedido}
+        >
+          Realizar Pedido
+        </button>
+      </div>
+    )}
+
+    {mostrarFormulario && (
+      <div className="max-w-3xl mx-auto mt-12 bg-white p-8 rounded-lg shadow">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Formulario de Envío</h2>
+
+        <div className="grid gap-4">
+          <label className="block">
+            <span className="text-gray-700">Nombre:</span>
             <input
               type="text"
               name="nombre"
               value={formulario.nombre}
               onChange={manejarEnvio}
-
-
+              className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </label>
-          <label>
-            Correo:
+
+          <label className="block">
+            <span className="text-gray-700">Correo:</span>
             <input
               type="email"
               name="correo"
               value={formulario.correo}
               onChange={manejarEnvio}
+              className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </label>
-          <label>
-            Teléfono:
+
+          <label className="block">
+            <span className="text-gray-700">Teléfono:</span>
             <input
               type="tel"
               name="telefono"
               value={formulario.telefono}
               onChange={manejarEnvio}
+              className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </label>
-          <label>
-            Dirección de Envío:
+
+          <label className="block">
+            <span className="text-gray-700">Dirección de Envío:</span>
             <textarea
               name="direccion"
               value={formulario.direccion}
               onChange={manejarEnvio}
+              className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 h-28 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </label>
-          <button className="confirmar-pedido-btn" onClick={enviarFormulario}>Confirmar Pedido</button>
-          </div>
+
+          <button
+            onClick={enviarFormulario}
+            className="mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md shadow-md"
+          >
+            Confirmar Pedido
+          </button>
         </div>
-      )}
       </div>
-  
-  );
+    )}
+  </div>
+);
+
   
 };
 
